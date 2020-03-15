@@ -26,6 +26,8 @@ class PrepareOneYear(QObject):
 		# prepare days year
 		for cur_month in range(0,12):
 			myCaltempo += list(self.cal.itermonthdates(self.cur_year , cur_month + 1))
+		# remove duplicate date
+		myCaltempo = list(dict.fromkeys(myCaltempo))
 		# complete specials days
 		for row in myCaltempo:
 			rowtab = []
