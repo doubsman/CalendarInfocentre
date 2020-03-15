@@ -7,13 +7,12 @@ from PyQt5.QtGui import QColor
 
 class ModelCalendar(QAbstractTableModel):
 	"""Abstract model for qtableview."""
-	headersName = ['Date', 'Datetime', 'Days', 'Month', 'Year', 'WeekDay', 'Week_number_Sunday', 'Week_number_Monday', 'Day_Year', 'litteral_Date', 'litteral_Date_short', 'litteral_Day', 'litteral_Day_short', 'litteral_Month', 'litteral_Month_short', 'public_french_holidays']
+	columns = ['Date', 'Datetime', 'Days', 'Month', 'Year', 'WeekDay', 'Week_number_Sunday', 'Week_number_Monday', 'Day_Year', 'litteral_Date', 'litteral_Date_short', 'litteral_Day', 'litteral_Day_short', 'litteral_Month', 'litteral_Month_short', 'litteral_french_holidays']
 
 	def __init__(self, array, parent = None):
 		"""Init Model Abstract."""
 		super(ModelCalendar, self).__init__(parent)
 		self.parent = parent
-		self.columns = self.headersName
 		self.arraydata = array
 	
 	def headerData(self, section, orientation, role=Qt.DisplayRole):
@@ -42,8 +41,8 @@ class ModelCalendar(QAbstractTableModel):
 				return QVariant(QColor(204, 24, 66))
 		elif role == Qt.BackgroundRole:
 			if self.arraydata[index.row()][self.columns.index('WeekDay')] in ['0', '6']:
-				return QVariant(QColor(218, 220, 235))
-			if self.arraydata[index.row()][self.columns.index('public_french_holidays')] != '':
+				return QVariant(QColor(166, 165, 162))
+			elif self.arraydata[index.row()][self.columns.index('litteral_french_holidays')] != '':
 				return QVariant(QColor(204, 222, 235))	
 		elif role == Qt.TextAlignmentRole:
 			# TextAlignmentRole
@@ -52,20 +51,4 @@ class ModelCalendar(QAbstractTableModel):
 			return QVariant()
 		return QVariant(self.arraydata[index.row()][index.column()])
 	
-	def getData(self, row, colname=None, col=None):
-		if self.rowCount() > 0:
-			if col is None:
-				return self.arraydata[row][self.myindex.index(colname)]
-			elif colname is None:
-				return self.arraydata[row][col]
-		return QVariant()
 	
-	def getList(self, colname, desc=True):
-		"""Build list column."""
-		mylist = []
-		for row in range(self.rowCount()):
-			itemlist = self.arraydata[row][self.myindex.index(colname)]
-			if itemlist not in mylist:
-				mylist.append(itemlist)
-		mylist.sort(reverse=desc)
-		return mylist
